@@ -16,11 +16,11 @@ targets_generation_daily_MOM <- function(current_file, historic_file){
     dplyr::select(c(DateTime,Reservoir,Depth_m,DO_mgL))
 
   #download CTD data from EDI
-  infile1 <- tempfile()
-  try(download.file(historic_file,infile1,method="curl"))
-  if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+  #infile1 <- tempfile()
+  #try(download.file(historic_file,infile1,method="curl"))
+  #if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
 
-  historic_df <- readr::read_csv(infile1) |>
+  historic_df <- readr::read_csv(historic_file) |>
     dplyr::filter(Site == 50, Reservoir %in% c("FCR","BVR"), Depth_m > 0)
 
   #select cols needed to generate targets

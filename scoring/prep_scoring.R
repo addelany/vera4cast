@@ -213,6 +213,7 @@ bench::bench_time({ # ~ 13s
   forecasts |>
     anti_join(select(scores, all_of(score_key_cols))) |> # forecast is unscored
     inner_join(targets) |> # forecast has targets available
+    distinct() |> # remove duplicate submissions
     group_by(variable) |>
     write_dataset("s3://bio230121-bucket01/vera4cast/tmp/score_me")
 

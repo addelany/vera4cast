@@ -60,3 +60,9 @@ jobs:
           git add .
           git commit -a -m "update pages" || echo "nothing to commit"
           git push https://${GITHUB_PAT}:${GITHUB_PAT}@github.com/${GITHUB_REPOSITORY}
+
+      - name: Ping Healthchecks
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+          curl -m 10 --retry 5 https://hc-ping.com/bd7eb27f-ed50-496a-830c-ad7b3700bba9

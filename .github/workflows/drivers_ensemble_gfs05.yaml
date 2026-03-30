@@ -21,6 +21,7 @@ jobs:
       - name: Install
         shell: Rscript {0}
         run: |
+          install.packages('remotes')
           remotes::install_github("FLARE-forecast/RopenMeteo")
           remotes::install_version("arrow", version = "20.0.0")
 

@@ -6,7 +6,7 @@ FROM rocker/geospatial:latest
 
 # COPY --chown=${NB_USER} . ${HOME}
 
-RUN install2.r arrow bslib bsicons ggiraph patchwork pak jsonlite reticulate duckdbfs furrr future googlesheets4 here imputeTS tsibble fable RcppRoll RCurl fabletools tidymodels xgboost gdalcubes minioclient gsheet
+RUN install2.r arrow bslib bsicons ggiraph patchwork pak jsonlite reticulate duckdbfs furrr future googlesheets4 here imputeTS tsibble fable RcppRoll RCurl fabletools tidymodels xgboost gdalcubes minioclient gsheet devtools remotes
 RUN R -e "devtools::install_github('eco4cast/score4cast')"
 RUN sleep 180
 RUN R -e "devtools::install_github('cboettig/minioclient')"

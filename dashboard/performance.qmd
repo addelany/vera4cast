@@ -75,8 +75,8 @@ df <- duckdbfs::open_dataset(paste0("s3://",config$forecasts_bucket,
   # filter((depth_m == 1.6 & site_id == "fcre") | (depth_m == 1.5 & site_id == "bvre") | is.na(depth_m),
   #        lubridate::as_date(datetime) > lubridate::as_date(reference_datetime)) 
 
-#reference_date <- max(lubridate::as_date(df$reference_datetime))
-reference_date <- max(lubridate::as_date(df$reference_datetime) - lubridate::days(1))
+reference_date <- max(lubridate::as_date(df$reference_datetime))
+#reference_date <- max(lubridate::as_date(df$reference_datetime) - lubridate::days(1))
 ```
 
 Forecasts submitted on `r reference_date`

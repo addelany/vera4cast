@@ -89,15 +89,21 @@ bundle_me <- function(path) {
     write_dataset("tmp_new.parquet")
 
   #print('write old')
-  # special filters should not be needed on bundled copy
-  open_dataset(bundled_path, conn = con, unify_schemas = TRUE) |>
-    write_dataset("tmp_old.parquet")
+  # Only if model has bundled entries!
+  old <- tryCatch({
+    open_dataset(bundled_path, conn = con) |>
+      write_dataset("tmp_old.parquet")
+    old <- open_dataset("tmp_old.parquet")
+  },
+  # no pre-existing data bundles
+  error = function(e) NULL
+  )
 
   # these are both local, so we can stream back.
   #print('open new')
   new <- open_dataset("tmp_new.parquet")
   #print('open old')
-  old <- open_dataset("tmp_old.parquet")
+  #old <- open_dataset("tmp_old.parquet")
 
   ## We can just "append", we no longer face duplicates:
   # by <- join_by(datetime, site_id, prediction, parameter, family, reference_datetime, pub_datetime, duration, model_id, project_id, variable)
@@ -106,12 +112,18 @@ bundle_me <- function(path) {
   #  stopifnot(previous_n - filtered_n == 0)
 
   ## no partition levels left so we must write to an explicit .parquet
-  bundled_dir <- bundled_path |> str_replace(fixed("s3://"), "osn/") |> mc_ls(details = TRUE)
-  mc_bundled_path <- bundled_dir |> filter(!is_folder) |> pull(path)
-  stopifnot(length(mc_bundled_path) == 1)
-  bundled_path <- mc_bundled_path |> str_replace(fixed("osn/"), fixed("s3://"))
+  if(!is.null(old)) {
+    bundled_dir <- bundled_path |> str_replace(fixed("s3://"), "osn/") |> mc_ls(details = TRUE)
+    mc_bundled_path <- bundled_dir |> filter(!is_folder) |> pull(path)
+    stopifnot(length(mc_bundled_path) == 1)
+    bundled_path <- mc_bundled_path |> str_replace(fixed("osn/"), fixed("s3://"))
 
-  union_all(old, new) |>
+    new <- union(old, new)
+  }
+
+
+  # save bundles
+  new |>
     write_dataset(bundled_path,
                   options = list("PER_THREAD_OUTPUT false"))
 

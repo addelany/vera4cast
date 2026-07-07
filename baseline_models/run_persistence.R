@@ -106,7 +106,7 @@ site_var_combinations_deeper_depth_bvr <- expand.grid(var = c('DO_mgL_mean',
                                                       depth = 8)
 
 persistenceRW_insitu_deeper_bvr <- purrr::pmap_dfr(site_var_combinations_deeper_depth_bvr,
-                                                         .f = ~ generate_baseline_persistence_constant_sd(targets = targets_insitu,
+                                                         .f = ~ generate_baseline_persistenceRW(targets = targets_insitu,
                                                                                                           h = 35,
                                                                                                           model_id = 'persistenceRW',
                                                                                                           forecast_date = Sys.Date(),

@@ -25,6 +25,7 @@ sapply(paste0("./R/nnetar_helper_functions/", data.format.functions),source,.Glo
 
 #Define targets filepath
 targets <- "https://amnh1.osn.mghpcc.org/bio230121-bucket01/vera4cast/targets/project_id=vera4cast/duration=P1D/daily-insitu-targets.csv.gz"
+inflow_targets <- "https://amnh1.osn.mghpcc.org/bio230121-bucket01/vera4cast/targets/project_id=vera4cast/duration=P1D/daily-inflow-targets.csv.gz"
 
 #target_variable <- 'Chla_ugL_mean'
 #target_variable <- 'Temp_C_mean'
@@ -186,6 +187,41 @@ for (t in target_variables_no_depth){
 
 
 
+## non-depth variables
+target_variables_inflow <- c("Flow_cms_mean", "Temp_C_mean")
+
+
+prediction_df_inflow <- data.frame()
+
+for (t in target_variables_inflow){
+
+  print(t)
+
+  #Define start and end dates (needed for interpolation)
+  end_date = curr_reference_datetime
+
+  #Set prediction window and forecast horizon
+  reference_datetime <- curr_reference_datetime
+  forecast_horizon = 35
+
+
+  #Format data
+  dat_NNETAR <- format_data_NNETAR(targets = inflow_targets,
+                                   target_var = t,
+                                   end_date = end_date,
+                                   depth_select = c(NA, NA))
+  #Predict variable
+  pred <- fableNNETAR(data = dat_NNETAR,
+                      target_var = t,
+                      reference_datetime = reference_datetime,
+                      forecast_horizon = forecast_horizon,
+                      depth_select = c(NA, NA))
+
+  prediction_df_inflow <- bind_rows(prediction_df_inflow, pred)
+
+} # close variable iteration loop
+
+
 
 prediction_df <- bind_rows(prediction_df_shallow, prediction_df_deep, prediction_df_no_depth)
 
@@ -193,7 +229,7 @@ prediction_df <- bind_rows(prediction_df_shallow, prediction_df_deep, prediction
 theme <- 'daily'
 date <- curr_reference_datetime
 
-forecast_models <- c("fableNNETAR_focal")
+forecast_models <- c("fableNNETAR")
 
 forecast_name <- c(paste0(forecast_models, ".csv"))
 

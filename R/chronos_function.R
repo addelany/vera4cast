@@ -12,7 +12,7 @@ generate_chronos_forecast <- function(targets,
                                       forecast_date = Sys.Date(),
                                       h,
                                       depth = 'target',
-                                      model_name = 'vera_chronos',
+                                      model_name = 'chronos2',
                                       chronos_model = "amazon/chronos-bolt-small",
                                       ...) {
 

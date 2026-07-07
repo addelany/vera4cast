@@ -4,7 +4,7 @@ generate_prophet_forecast <- function(targets,
                                       forecast_date = Sys.Date(),
                                       h,
                                       depth = 'target',
-                                      model_name = 'vera_prophet',
+                                      model_name = 'prophet',
                                       ...) {
 
   if (depth == 'target') {

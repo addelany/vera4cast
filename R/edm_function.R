@@ -5,7 +5,7 @@ generate_edm_forecast <- function(targets,
                                   forecast_date = Sys.Date(),
                                   h,
                                   depth = 'target',
-                                  model_name = 'vera_edm',
+                                  model_name = 'EDM',
                                   ...) {
 
   if (depth == 'target') {

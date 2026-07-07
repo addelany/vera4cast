@@ -18,7 +18,7 @@ fableETS <- function(targets,
                      site,
                      var,
                      depth = 'target',
-                     model_id = 'vera_ETS'){
+                     model_id = 'ETS'){
 
   reference_datetime <- forecast_date
 

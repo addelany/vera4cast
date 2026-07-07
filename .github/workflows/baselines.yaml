@@ -43,6 +43,42 @@ jobs:
         shell: Rscript {0}
         run: |
            source("baseline_models/run_monthly_mean.R")
+
+      - name: Generate persistence constant SD
+        shell: Rscript {0}
+        run: |
+           source("baseline_models/run_persistence_constant_sd.R")
+
+      - name: Generate arima no covariate
+        shell: Rscript {0}
+        run: |
+           source("baseline_models/run_arima_no_covariate.R")
+
+      - name: Generate NNETAR
+        shell: Rscript {0}
+        run: |
+           source("baseline_models/nnetar_workflows.R")
+
+      - name: Generate ETS
+        shell: Rscript {0}
+        run: |
+           source("baseline_models/run_ETS_model.R")
+
+      - name: Generate prophet
+        shell: Rscript {0}
+        run: |
+           source("baseline_models/run_prophet.R")
+
+      - name: Generate EDM
+        shell: Rscript {0}
+        run: |
+           source("baseline_models/run_edm.R")
+
+      - name: Generate Chronos2
+        shell: Rscript {0}
+        run: |
+           source("baseline_models/run_chronos2.R")
+
       - name: Healthcheck
         run: |
           sudo apt-get update

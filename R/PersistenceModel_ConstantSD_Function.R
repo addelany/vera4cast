@@ -10,7 +10,7 @@ generate_baseline_persistence_constant_sd <- function(targets,
                                             bootstrap = FALSE,
                                             boot_number = 200, ...) {
 
-  message('Generating persistenceRW forecast for ',  var, ' at ', site)
+  message('Generating persistence_const_SD forecast for ',  var, ' at ', site)
 
   if (depth == 'target') {
     # only generates forecasts for target depths

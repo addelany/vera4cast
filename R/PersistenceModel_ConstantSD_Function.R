@@ -88,6 +88,9 @@ generate_baseline_persistence_constant_sd <- function(targets,
       # extract parameters
       parameters <- distributional::parameters(forecast$observation)
 
+      names(forecast)
+      names(parameters)
+
       # make right format
       forecast <- bind_cols(forecast, parameters) |>
         pivot_longer(mu:sigma,

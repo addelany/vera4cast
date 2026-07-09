@@ -12,7 +12,7 @@ Sys.unsetenv("AWS_S3_ENDPOINT")
 Sys.setenv("AWS_EC2_METADATA_DISABLED"="TRUE")
 
 config <- yaml::read_yaml("challenge_configuration.yaml")
-team_name <- 'persistence_constSD'
+team_name <- 'persistence_constantSD'
 
 source('R/PersistenceModel_ConstantSD_Function.R')
 source('R/convert2binary.R')

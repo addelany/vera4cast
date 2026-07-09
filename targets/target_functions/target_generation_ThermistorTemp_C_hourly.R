@@ -63,11 +63,11 @@ target_generation_ThermistorTemp_C_hourly <- function(current_file, historic_fil
 
   # read in historical data file
   # EDI
-  infile <- tempfile()
-  try(download.file(historic_file, infile, method="curl"))
-  if (is.na(file.size(infile))) download.file(historic_file,infile,method="auto")
+  # infile <- tempfile()
+  # try(download.file(historic_file, infile, method="curl"))
+  # if (is.na(file.size(infile))) download.file(historic_file,infile,method="auto")
 
-  historic_df <- readr::read_csv(infile, show_col_types = F) |>
+  historic_df <- readr::read_csv(historic_file, show_col_types = F) |>
     dplyr::filter(Site == 50) |>
     dplyr::select(Reservoir, DateTime,
                   dplyr::starts_with('ThermistorTemp'))

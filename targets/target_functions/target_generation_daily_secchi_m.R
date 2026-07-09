@@ -17,13 +17,13 @@ target_generation_daily_secchi_m <- function(current, edi){
   secchi_current_1 <- read_csv(current)
 
   #read in the EDI data
-  inUrl1  <- edi
-  infile1 <- tempfile()
-  try(download.file(inUrl1,infile1,method="curl"))
-  if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
-  edi <-read_csv(infile1)
+  # inUrl1  <- edi
+  # infile1 <- tempfile()
+  # try(download.file(inUrl1,infile1,method="curl"))
+  # if (is.na(file.size(infile1))) download.file(inUrl1,infile1,method="auto")
+  # edi_df <-read_csv(edi)
 #subset to only one spot in the reservoir (deep hole)
-  edi_1 <- edi %>% subset(Site == "50")
+  edi_1 <- edi_df %>% subset(Site == "50")
 
   #site ids: BVR > bvre
 

@@ -83,7 +83,7 @@ target_generation_FluoroProbe <- function(current_file, historic_file){
 
   biomass_cmax <- fp %>%
     mutate(Date = date(DateTime)) %>%
-    group_by(Date) %>%
+    group_by(Date, Reservoir) %>%
     slice(which.max(TotalConc_ugL_sample)) %>%
     ungroup() %>%
     pivot_longer(GreenAlgae_ugL_sample:TotalConc_ugL_sample, names_to = "variable", values_to = "observation") %>%
@@ -96,7 +96,7 @@ target_generation_FluoroProbe <- function(current_file, historic_file){
 
   cmax_depth <- fp %>%
     mutate(Date = date(DateTime)) %>%
-    group_by(Date) %>%
+    group_by(Date, Reservoir) %>%
     slice(which.max(TotalConc_ugL_sample)) %>%
     pivot_longer(Depth_m, names_to = "variable", values_to = "observation") %>%
     rename(datetime = DateTime) %>%
@@ -108,12 +108,12 @@ target_generation_FluoroProbe <- function(current_file, historic_file){
 
   mean_biomass <- fp %>%
     mutate(Date = date(DateTime)) %>%
-    dplyr::group_by(Date) %>%
+    dplyr::group_by(Date, Reservoir) %>%
     dplyr::summarize(mean_biomass = mean(TotalConc_ugL_sample, na.rm = TRUE))
 
   dcm <- fp %>%
     mutate(Date = date(DateTime)) %>%
-    group_by(Date) %>%
+    group_by(Date, Reservoir) %>%
     slice(which.max(TotalConc_ugL_sample)) %>%
     left_join(mean_biomass) %>%
     mutate(DeepChlorophyllMaximum_binary_sample = ifelse(TotalConc_ugL_sample > mean_biomass + 0.5 & TotalConc_ugL_sample > mean_biomass*1.5 & ((Reservoir == "FCR" & Depth_m > 0.93) | (Reservoir == "BVR" & Depth_m > 1)), 1, 0)) %>%

@@ -47,17 +47,17 @@ target_generation_exo_daily <- function (fcr_files,
 
   ## only use complete days (remove only partially sampled days) # 144 sample events per day (6*24)
   fcr_remove_days <- fcr_df |>
-    group_by(sampledate) |>
-    summarize(n_samples = n_distinct(DateTime)) |>
-    filter(n_samples < 144) |>
-    filter(sampledate == Sys.Date() | n_samples < 144/2)
+    dplyr::group_by(sampledate) |>
+    dplyr::summarize(n_samples = n_distinct(DateTime)) |>
+    dplyr::filter(n_samples < 144) |>
+    dplyr::filter(sampledate == Sys.Date() | n_samples < 144/2)
 
 
   bvr_remove_days <- bvr_df |>
-    group_by(sampledate) |>
-    summarize(n_samples = n_distinct(DateTime)) |>
-    filter(n_samples < 144) |>
-    filter(sampledate == Sys.Date() | n_samples < 144/2)
+    dplyr::group_by(sampledate) |>
+    dplyr::summarize(n_samples = n_distinct(DateTime)) |>
+    dplyr::filter(n_samples < 144) |>
+    dplyr::filter(sampledate == Sys.Date() | n_samples < 144/2)
 
 
   # Format data to combine
@@ -96,43 +96,43 @@ target_generation_exo_daily <- function (fcr_files,
 
   ## build DO for each site separately and then combine
   fcr_DO <- fcr_df |>
-    filter(!sampledate %in% fcr_remove_days$sampledate) |>  # filter for complete days
-    select(DateTime, (starts_with('RDO') & ends_with('adjusted')) | (starts_with('EXODO'))) |>
-    pivot_longer(-DateTime, names_to = 'variable', values_to = 'observation') |>
-    mutate(sampledate = as.Date(DateTime)) |>
-    mutate(depth_m = as.numeric(sapply(stringr::str_split(variable, "_"), function(x) x[3]))) |>
-    mutate(depth_m = ifelse((grepl('EXODO_mgL', variable) | grepl('EXODOsat', variable)), 1.6, depth_m)) |>
-    mutate(variable = ifelse(grepl('RDO_mgL', variable), 'DO_mgL_mean', variable)) |>
-    mutate(variable = ifelse(grepl('RDOsat', variable), 'DOsat_percent_mean', variable)) |>
-    mutate(variable = ifelse(grepl('EXODO_mgL', variable), 'DO_mgL_mean', variable)) |>
-    mutate(variable = ifelse(grepl('EXODOsat', variable), 'DOsat_percent_mean', variable)) |>
-    summarise(obs_avg = mean(observation, na.rm = TRUE), .by = c('sampledate', 'variable', 'depth_m')) |>
-    mutate(datetime=ymd_hms(paste0(sampledate,"","00:00:00"))) |>
-    select(datetime, depth_m, observation = obs_avg, variable)
+    dplyr::filter(!sampledate %in% fcr_remove_days$sampledate) |>  # filter for complete days
+    dplyr::select(DateTime, (starts_with('RDO') & ends_with('adjusted')) | (starts_with('EXODO'))) |>
+    tidyr::pivot_longer(-DateTime, names_to = 'variable', values_to = 'observation') |>
+    dplyr::mutate(sampledate = as.Date(DateTime)) |>
+    dplyr::mutate(depth_m = as.numeric(sapply(stringr::str_split(variable, "_"), function(x) x[3]))) |>
+    dplyr::mutate(depth_m = ifelse((grepl('EXODO_mgL', variable) | grepl('EXODOsat', variable)), 1.6, depth_m)) |>
+    dplyr::mutate(variable = ifelse(grepl('RDO_mgL', variable), 'DO_mgL_mean', variable)) |>
+    dplyr::mutate(variable = ifelse(grepl('RDOsat', variable), 'DOsat_percent_mean', variable)) |>
+    dplyr::mutate(variable = ifelse(grepl('EXODO_mgL', variable), 'DO_mgL_mean', variable)) |>
+    dplyr::mutate(variable = ifelse(grepl('EXODOsat', variable), 'DOsat_percent_mean', variable)) |>
+    dplyr::summarise(obs_avg = mean(observation, na.rm = TRUE), .by = c('sampledate', 'variable', 'depth_m')) |>
+    dplyr::mutate(datetime=ymd_hms(paste0(sampledate,"","00:00:00"))) |>
+    dplyr::select(datetime, depth_m, observation = obs_avg, variable)
 
   fcr_DO$site_id <- 'fcre'
 
 
   bvr_DO <- bvr_df |>
-    filter(!sampledate %in% bvr_remove_days$sampledate) |> # filter for complete days
-    select(DateTime, (starts_with('RDO')) | (starts_with('EXODO'))) |>
-    pivot_longer(-DateTime, names_to = 'variable', values_to = 'observation') |>
-    mutate(sampledate = as.Date(DateTime)) |>
-    mutate(depth_m = as.numeric(sapply(stringr::str_split(variable, "_"), function(x) x[3]))) |>
-    mutate(depth_m = ifelse((grepl('EXODO_mgL', variable) | grepl('EXODOsat', variable)), 1.5, depth_m)) |>
-    mutate(variable = ifelse(grepl('RDO_mgL', variable), 'DO_mgL_mean', variable)) |>
-    mutate(variable = ifelse(grepl('RDOsat', variable), 'DOsat_percent_mean', variable)) |>
-    mutate(variable = ifelse(grepl('EXODO_mgL', variable), 'DO_mgL_mean', variable)) |>
-    mutate(variable = ifelse(grepl('EXODOsat', variable), 'DOsat_percent_mean', variable)) |>
-    summarise(obs_avg = mean(observation, na.rm = TRUE), .by = c('sampledate', 'variable', 'depth_m')) |>
-    mutate(datetime=ymd_hms(paste0(sampledate,"","00:00:00"))) |>
-    select(datetime, depth_m, observation = obs_avg, variable, observation = obs_avg)
+    dplyr::filter(!sampledate %in% bvr_remove_days$sampledate) |> # filter for complete days
+    dplyr::select(DateTime, (starts_with('RDO')) | (starts_with('EXODO'))) |>
+    tidyr::pivot_longer(-DateTime, names_to = 'variable', values_to = 'observation') |>
+    dplyr::mutate(sampledate = as.Date(DateTime)) |>
+    dplyr::mutate(depth_m = as.numeric(sapply(stringr::str_split(variable, "_"), function(x) x[3]))) |>
+    dplyr::mutate(depth_m = ifelse((grepl('EXODO_mgL', variable) | grepl('EXODOsat', variable)), 1.5, depth_m)) |>
+    dplyr::mutate(variable = ifelse(grepl('RDO_mgL', variable), 'DO_mgL_mean', variable)) |>
+    dplyr::mutate(variable = ifelse(grepl('RDOsat', variable), 'DOsat_percent_mean', variable)) |>
+    dplyr::mutate(variable = ifelse(grepl('EXODO_mgL', variable), 'DO_mgL_mean', variable)) |>
+    dplyr::mutate(variable = ifelse(grepl('EXODOsat', variable), 'DOsat_percent_mean', variable)) |>
+    dplyr::summarise(obs_avg = mean(observation, na.rm = TRUE), .by = c('sampledate', 'variable', 'depth_m')) |>
+    dplyr::mutate(datetime=ymd_hms(paste0(sampledate,"","00:00:00"))) |>
+    dplyr::select(datetime, depth_m, observation = obs_avg, variable, observation = obs_avg)
 
   bvr_DO$site_id <- 'bvre'
 
 
   combined_DO <- bind_rows(fcr_DO, bvr_DO) |>
-    mutate(observation = ifelse(is.nan(observation), NA, observation))
+    dplyr::mutate(observation = ifelse(is.nan(observation), NA, observation))
 
   #depth is 1.5 at BVR and 1.6 and FCR
 

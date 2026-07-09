@@ -66,10 +66,10 @@ generate_schmidt.stability <- function(current_file, historic_file) {
 
   # read in historical data file
   # EDI
-  infile <- tempfile()
-  try(download.file(historic_file, infile, method="curl"))
-  if (is.na(file.size(infile))) download.file(historic_file,infile,method="auto")
-  historic_df <- readr::read_csv(infile, show_col_types = F) |>
+  # infile <- tempfile()
+  # try(download.file(historic_file, infile, method="curl"))
+  # if (is.na(file.size(infile))) download.file(historic_file,infile,method="auto")
+  historic_df <- readr::read_csv(historic_file, show_col_types = F) |>
     dplyr::filter(Site == 50) |>
     dplyr::select(Reservoir, DateTime,
                   dplyr::starts_with('ThermistorTemp'))
@@ -129,14 +129,14 @@ generate_schmidt.stability <- function(current_file, historic_file) {
   final_df <- dplyr::bind_rows(historic_df_1, current_df_1) |>
     dplyr::select(any_of(c('date', 'Reservoir', 'depth', 'observation', 'WaterLevel')))
 
-  # Need bathymetry
-  infile2 <- tempfile()
-  try(download.file("https://pasta.lternet.edu/package/data/eml/edi/1254/1/f7fa2a06e1229ee75ea39eb586577184",
-                    infile2, method="curl"))
-  if (is.na(file.size(infile2))) download.file("https://pasta.lternet.edu/package/data/eml/edi/1254/1/f7fa2a06e1229ee75ea39eb586577184",
-                                               infile2,method="auto")
+  # # Need bathymetry
+  # infile2 <- tempfile()
+  # try(download.file("https://pasta.lternet.edu/package/data/eml/edi/1254/1/f7fa2a06e1229ee75ea39eb586577184",
+  #                   infile2, method="curl"))
+  # if (is.na(file.size(infile2))) download.file("https://pasta.lternet.edu/package/data/eml/edi/1254/1/f7fa2a06e1229ee75ea39eb586577184",
+  #                                              infile2,method="auto")
 
-  bathymetry <- readr::read_csv(infile2, show_col_types = F)  |>
+  bathymetry <- readr::read_csv('https://pasta.lternet.edu/package/data/eml/edi/1254/1/f7fa2a06e1229ee75ea39eb586577184', show_col_types = F)  |>
     dplyr::select(Reservoir, Depth_m, SA_m2) |>
     # dplyr::rename(depths = Depth_m,
     #               areas = SA_m2) |>

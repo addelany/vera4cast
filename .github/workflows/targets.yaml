@@ -19,6 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        shell: Rscript {0}
+        run: |
+          install.packages(c("curl"))
+
       - name: Generate targets
         shell: Rscript {0}
         run: |

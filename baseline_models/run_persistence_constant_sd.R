@@ -34,7 +34,8 @@ persistence_constSD_inflow <- purrr::map_dfr(.x = c('Flow_cms_mean', 'Temp_C_mea
                                        .f = ~ generate_baseline_persistence_constant_sd(targets = targets_tubr,
                                                                               h = 35,
                                                                               model_id = team_name,
-                                                                              forecast_date = Sys.Date(),
+                                                                              #forecast_date = Sys.Date(),
+                                                                              aforecast_date = as.Date('2026-07-01')
                                                                               site = 'tubr',
                                                                               depth = 'target',
                                                                               var = .x,

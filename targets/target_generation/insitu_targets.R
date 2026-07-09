@@ -1,4 +1,5 @@
 library(RCurl)
+library(curl)
 
 ## set destination s3 paths
 s3 <- arrow::s3_bucket("bio230121-bucket01", endpoint_override = "amnh1.osn.mghpcc.org")
@@ -106,7 +107,7 @@ metals_data <- target_generation_metals_daily(
 current_data_file = 'https://raw.githubusercontent.com/CareyLabVT/Reservoirs/refs/heads/master/Data/DataNotYetUploadedToEDI/Metals_Data/metals_L1.csv',
 edi_data_file = "https://pasta.lternet.edu/package/data/eml/edi/455/9/9a072c4e4af39f96f60954fc4f7d8be5")
 
- metals_data$datetime <- lubridate::as_datetime(metals_data$datetime)   
+ metals_data$datetime <- lubridate::as_datetime(metals_data$datetime)
 
 ## SILICA
 print('Silica')

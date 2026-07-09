@@ -124,7 +124,8 @@ arima_nc_ghg_insitu <- purrr::pmap_dfr(site_var_combinations_ghg_insitu,
                                                                                                    h = 35,
                                                                                                    model_id = team_name,
                                                                                                    forecast_date = Sys.Date(),
-                                                                                                   depth = c(0.1),
+                                                                                                   #depth = c(0.1),
+                                                                                                   depth = 'target',
                                                                                                    ...))
 
 ## Productivity variables
